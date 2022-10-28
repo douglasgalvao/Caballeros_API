@@ -1,1 +1,4 @@
-/home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/CaballerosApplication.java
+/home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/controllers/cliente/ClienteController.java
+/home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/main/CaballerosApplication.java
+/home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/repositories/cliente/ClienteRepository.java
+/home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/models/cliente/Cliente.java
