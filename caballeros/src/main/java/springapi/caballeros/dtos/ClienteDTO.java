@@ -21,6 +21,7 @@ import lombok.Data;
 public class ClienteDTO {
     private UUID id;
     private String nome;
+    private String q;
     private String numero;
     private String email;
     private int numeroAgendamentos;

@@ -8,5 +8,4 @@ import springapi.caballeros.models.cliente.Cliente;
 public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
     public Cliente findByEmail(String email);
 
-
 }

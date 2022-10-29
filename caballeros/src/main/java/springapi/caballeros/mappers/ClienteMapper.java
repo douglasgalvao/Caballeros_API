@@ -10,7 +10,12 @@ import springapi.caballeros.models.cliente.Cliente;
 public class ClienteMapper {
     public static Cliente toModel(ClienteDTO clienteDTO) {
         return Cliente.builder()
-
+                .id(clienteDTO.getId())
+                .password(clienteDTO.getPassword())
+                .nome(clienteDTO.getNome())
+                .email(clienteDTO.getEmail())
+                .numero(clienteDTO.getNumero())
+                .numeroAgendamentos(clienteDTO.getNumeroAgendamentos())
                 .build();
     }
 

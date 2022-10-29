@@ -31,6 +31,7 @@ public class Cliente {
     @Column(unique = true)
     private String email;
     private int numeroAgendamentos;
+    @Column(name = "password")
     private String password;
 
     public Cliente() {
@@ -38,10 +39,11 @@ public class Cliente {
         this.nome = null;
         this.numero = null;
         this.password = null;
+        this.email=null;
         this.numeroAgendamentos = 0;
     }
 
-    Cliente(String nome, String numero, String email, String password) {
+    public Cliente(String nome, String numero, String email, String password) {
         this.id = GenerateUUID.generateUUID();
         this.nome = nome;
         this.numero = numero;

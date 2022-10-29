@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import springapi.caballeros.dtos.ClienteDTO;
 import springapi.caballeros.mappers.ClienteMapper;
 import springapi.caballeros.models.cliente.Cliente;
@@ -22,7 +21,6 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();
-
 
     @Transactional
     public List<ClienteDTO> getAllClientes() {
@@ -35,9 +33,10 @@ public class ClienteService {
     }
 
     @Transactional
-    public void saveCliente(Cliente cliente) {
-        encoder.encode()
-        clienteRepository.save(cliente);
+    public void saveCliente(ClienteDTO cliente) {
+        Cliente client = ClienteMapper.toModel(cliente);
+        client.setPassword(encoder.encode(cliente.getPassword()));
+        clienteRepository.save(client);
     }
 
     @Transactional
@@ -70,8 +69,6 @@ public class ClienteService {
         return "The Client has been deleted.";
     }
 
-
-
     @Transactional
     public String contarAgendamento(UUID id) {
         Cliente cliente = clienteRepository.getReferenceById(id);
@@ -81,18 +78,17 @@ public class ClienteService {
     }
 
     // @Transactional
-    // public ClienteDTO maiorCompra(){
-    //     List<ClienteDTO> clientes = getAllClientes();
-    //     ClienteDTO cliente = new ClienteDTO();
-    //     cliente.setNumeroAgendamentos(0);
-    //     clientes.forEach((client)-> {
-    //         if(client.getNumeroAgendamentos() > cliente.getNumeroAgendamentos()){
-    //             cliente = client;
-    //         } 
-            
-    //     });
-    //     return ClienteDTO.builder().build();
+    // public ClienteDTO getClienteQueMaisComprou(){
+    // List<ClienteDTO> clientes = getAllClientes();
+    // ClienteDTO cliente = new ClienteDTO();
+    // cliente.setNumeroAgendamentos(0);
+    // clientes.forEach((client)-> {
+    // if(client.getNumeroAgendamentos() > cliente.getNumeroAgendamentos()){
+    // cliente = client;
     // }
 
+    // });
+    // return ClienteDTO.builder().build();
+    // }
 
 }
