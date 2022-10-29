@@ -18,18 +18,9 @@ public class ClienteController {
     @Autowired
     ClienteService clienteService;
 
-    // quem deve acessar essa rota é o barbeiro quando confima o serviço
-    @PostMapping("countAppointment")
-    @ResponseBody
-    public ResponseEntity<String> contarAgendamento(UUID id){
-        return ResponseEntity.ok(clienteService.contarAgendamento(id));
-    }
-
-
-
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<ClienteDTO>> getAllClientes(){
+    public ResponseEntity<List<ClienteDTO>> getAllClientes() {
         return ResponseEntity.ok(clienteService.getAllClientes());
     }
 
@@ -41,20 +32,30 @@ public class ClienteController {
 
     @PostMapping(value = "/save")
     @ResponseBody
-    public ResponseEntity<HttpStatus> saveCliente(@RequestBody Cliente cliente) {
+    public ResponseEntity<HttpStatus> saveCliente(Cliente cliente) {
         clienteService.saveCliente(cliente);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-
     @DeleteMapping(value = "/{id}")
     @ResponseBody
-    public ResponseEntity<HttpStatus> deleteCliente(@PathVariable UUID id){
+    public ResponseEntity<HttpStatus> deleteCliente(@PathVariable UUID id) {
         clienteService.deleteCliente(id);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
+    @PostMapping(value = "/edit/{id}")
+    @ResponseBody
+    public ResponseEntity<HttpStatus> editCliente(@PathVariable UUID id, @RequestBody Cliente cliente) {
+        clienteService.editCliente(id, cliente);
+        return ResponseEntity.ok(HttpStatus.CREATED);
+    }
 
-    
+    // quem deve acessar essa rota é o barbeiro quando confima o serviço
+    @PostMapping("countAppointment")
+    @ResponseBody
+    public ResponseEntity<String> contarAgendamento(UUID id) {
+        return ResponseEntity.ok(clienteService.contarAgendamento(id));
+    }
 
 }
