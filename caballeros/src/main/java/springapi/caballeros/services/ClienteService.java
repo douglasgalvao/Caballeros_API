@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import springapi.caballeros.dtos.ClienteDTO;
@@ -19,7 +21,7 @@ import springapi.caballeros.repositories.ClienteRepository;
 public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
-
+    private final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Transactional
     public List<ClienteDTO> getAllClientes() {
