@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springapi.caballeros.dtos.ClienteDTO;
+import springapi.caballeros.dtos.ClienteLoginDTO;
 import springapi.caballeros.models.cliente.Cliente;
 import springapi.caballeros.services.ClienteService;
 
@@ -56,6 +57,14 @@ public class ClienteController {
     @ResponseBody
     public ResponseEntity<String> contarAgendamento(UUID id) {
         return ResponseEntity.ok(clienteService.contarAgendamento(id));
+    }
+
+
+    @PostMapping(value = "/login")
+    @ResponseBody
+    public ResponseEntity<HttpStatus> login(@RequestBody ClienteLoginDTO clienteLoginDTO){
+        // clienteService.login(clienteLoginDTO);
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
 }

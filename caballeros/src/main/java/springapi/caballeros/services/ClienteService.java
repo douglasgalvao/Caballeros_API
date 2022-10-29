@@ -23,6 +23,7 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
+
     @Transactional
     public List<ClienteDTO> getAllClientes() {
         return clienteRepository.findAll().stream().map(ClienteMapper::toDTO).collect(Collectors.toList());
@@ -35,6 +36,7 @@ public class ClienteService {
 
     @Transactional
     public void saveCliente(Cliente cliente) {
+        encoder.encode()
         clienteRepository.save(cliente);
     }
 

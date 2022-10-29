@@ -1,8 +1,11 @@
+/home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/auth/data/ClienteDetails.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/config/GenerateUUID.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/controllers/cliente/ClienteController.java
+/home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/auth/security/SecurityConfig.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/dtos/ClienteDTO.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/services/ClienteService.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/repositories/ClienteRepository.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/mappers/ClienteMapper.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/CaballerosApplication.java
+/home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/auth/data/UserDetailsService.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/models/cliente/Cliente.java
