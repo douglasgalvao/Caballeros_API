@@ -14,13 +14,17 @@ import org.springframework.stereotype.Service;
 import springapi.caballeros.dtos.ClienteDTO;
 import springapi.caballeros.mappers.ClienteMapper;
 import springapi.caballeros.models.Cliente;
+import springapi.caballeros.models.Role;
 import springapi.caballeros.repositories.ClienteRepository;
+import springapi.caballeros.repositories.RoleRepository;
 
 @Service
 public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();
+    @Autowired
+    private RoleRepository role;
 
     public List<ClienteDTO> getAllClientes() {
         return clienteRepository.findAll().stream().map(ClienteMapper::toDTO).collect(Collectors.toList());
@@ -42,15 +46,28 @@ public class ClienteService {
     }
 
     public String saveRole(Role role) {
-
+        if (role.getId().toString().length() <= 0 || role.getName().length() <= 0) {
+            throw new Error("You can add a empty role");
+        }
+        this.role.save(role);
+        return "Role was saved with success";
     }
 
     public Role findRoleById(UUID id) {
-
+        Optional<Role> role = this.role.findById(id);
+        if (role.isEmpty()) {
+            throw new Error("Role not found in database with this ID");
+        }
+        return role.get();
     }
 
     public Role findRoleByName(String name) {
-
+        Role role = this.role.findByName(name);
+        if (role.getName() == null || role.getId() == null ||
+                role.getId().toString().length() <= 0 || role.getName().length() <= 0) {
+            throw new Error("Role not found in database with this ID");
+        }
+        return role;
     }
 
     public String editCliente(UUID id, Cliente cliente) {

@@ -1,4 +1,4 @@
-package springapi.caballeros.controllers.cliente;
+package springapi.caballeros.controllers;
 
 import java.util.List;
 import java.util.UUID;
