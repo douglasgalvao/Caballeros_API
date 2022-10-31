@@ -27,4 +27,8 @@ public class Role {
     private UUID id;
     @Column(unique = true)
     private String name;
+
+    public Role(UUID id) {
+        this.id = id;
+    }
 }

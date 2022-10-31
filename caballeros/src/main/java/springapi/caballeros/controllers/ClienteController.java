@@ -8,8 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springapi.caballeros.dtos.ClienteDTO;
-import springapi.caballeros.dtos.ClienteLoginDTO;
+import springapi.caballeros.dtos.RolesUserDTO;
 import springapi.caballeros.models.Cliente;
+import springapi.caballeros.models.Role;
 import springapi.caballeros.services.ClienteService;
 
 @RestController
@@ -38,6 +39,13 @@ public class ClienteController {
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
+    @PostMapping(value = "/save/admin")
+    @ResponseBody
+    public ResponseEntity<HttpStatus> saveAdmin(@RequestBody ClienteDTO cliente) {
+        clienteService.saveAdmin(cliente);
+        return ResponseEntity.ok(HttpStatus.CREATED);
+    }
+
     @DeleteMapping(value = "/{id}")
     @ResponseBody
     public ResponseEntity<HttpStatus> deleteCliente(@PathVariable UUID id) {
@@ -59,12 +67,23 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.contarAgendamento(id));
     }
 
-
-    @PostMapping(value = "/login")
+    @PostMapping(value = "/save/clientRole")
     @ResponseBody
-    public ResponseEntity<HttpStatus> login(@RequestBody ClienteLoginDTO clienteLoginDTO){
-        // clienteService.login(clienteLoginDTO);
-        return ResponseEntity.ok(HttpStatus.CREATED);
+    public ResponseEntity<HttpStatus> saveRole(@RequestBody RolesUserDTO role) {
+        return ResponseEntity.ok(clienteService.saveRole(role));
+    }
+
+    @PostMapping(value = "/set/role")
+    @ResponseBody
+    public ResponseEntity<HttpStatus> setRole(@RequestBody Role role) {
+        return ResponseEntity.ok(clienteService.settRole(role));
+    }
+
+
+    @GetMapping(value = "/get/role")
+    @ResponseBody
+    public ResponseEntity<List<Role>> getAllRoles() {
+        return ResponseEntity.ok(clienteService.findAllRoles());
     }
 
 }

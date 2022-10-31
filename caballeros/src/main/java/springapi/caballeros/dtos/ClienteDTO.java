@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import springapi.caballeros.models.Role;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,7 +16,7 @@ import lombok.Data;
 public class ClienteDTO {
     private UUID id;
     private String nome;
-    private List<String> role;
+    private List<Role> role;
     private String numero;
     private String email;
     private int numeroAgendamentos;

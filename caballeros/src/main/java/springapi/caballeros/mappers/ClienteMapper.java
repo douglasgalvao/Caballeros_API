@@ -1,5 +1,7 @@
 package springapi.caballeros.mappers;
 
+import java.util.ArrayList;
+
 import lombok.Builder;
 import lombok.Data;
 import springapi.caballeros.dtos.ClienteDTO;
@@ -27,6 +29,7 @@ public class ClienteMapper {
                 .numero(cliente.getNumero())
                 .numeroAgendamentos(cliente.getNumeroAgendamentos())
                 .password(null)
+                .role(cliente.getRoles())
                 .build();
     }
 }
