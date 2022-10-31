@@ -1,5 +1,6 @@
-package springapi.caballeros.models.cliente;
+package springapi.caballeros.models;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -7,10 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+
 import lombok.Builder;
 import lombok.Data;
 import springapi.caballeros.config.GenerateUUID;
@@ -33,14 +36,17 @@ public class Cliente {
     private int numeroAgendamentos;
     @Column(name = "password")
     private String password;
+    @ManyToMany
+    private List<Role> roles;
 
     public Cliente() {
         this.id = GenerateUUID.generateUUID();
         this.nome = null;
         this.numero = null;
         this.password = null;
-        this.email=null;
+        this.email = null;
         this.numeroAgendamentos = 0;
+        this.roles = null;
     }
 
     public Cliente(String nome, String numero, String email, String password) {
@@ -50,6 +56,7 @@ public class Cliente {
         this.numeroAgendamentos = 0;
         this.email = email;
         this.password = password;
+        this.roles = null;
     }
 
 }

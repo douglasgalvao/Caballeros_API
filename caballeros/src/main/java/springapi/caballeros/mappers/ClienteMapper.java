@@ -3,7 +3,7 @@ package springapi.caballeros.mappers;
 import lombok.Builder;
 import lombok.Data;
 import springapi.caballeros.dtos.ClienteDTO;
-import springapi.caballeros.models.cliente.Cliente;
+import springapi.caballeros.models.Cliente;
 
 @Data
 @Builder

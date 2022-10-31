@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import springapi.caballeros.dtos.ClienteDTO;
 import springapi.caballeros.mappers.ClienteMapper;
-import springapi.caballeros.models.cliente.Cliente;
+import springapi.caballeros.models.Cliente;
 import springapi.caballeros.repositories.ClienteRepository;
 
 @Service
@@ -77,18 +77,18 @@ public class ClienteService {
         return ("Agendou!");
     }
 
-    @Transactional
-    public ClienteDTO x(){
-    List<ClienteDTO> clientes = getAllClientes();
-    ClienteDTO cliente = new ClienteDTO();
-    cliente.setNumeroAgendamentos(0);
-    clientes.forEach((client)-> {
-    if(client.getNumeroAgendamentos() > cliente.getNumeroAgendamentos()){
-    cliente = client;
-    }
+    // @Transactional
+    // public ClienteDTO getClienteComMaiorAgendamento(){
+    // List<ClienteDTO> clientes = getAllClientes();
+    // ClienteDTO cliente = new ClienteDTO();
+    // cliente.setNumeroAgendamentos(0);
+    // clientes.forEach((client)-> {
+    // if(client.getNumeroAgendamentos() > cliente.getNumeroAgendamentos()){
+    // cliente = client;
+    // }
 
-    });
-    return ClienteDTO.builder().build();
-    }
+    // });
+    // return ClienteDTO.builder().build();
+    // }
 
 }

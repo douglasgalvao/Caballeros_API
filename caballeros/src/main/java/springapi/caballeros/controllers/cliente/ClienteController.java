@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springapi.caballeros.dtos.ClienteDTO;
 import springapi.caballeros.dtos.ClienteLoginDTO;
-import springapi.caballeros.models.cliente.Cliente;
+import springapi.caballeros.models.Cliente;
 import springapi.caballeros.services.ClienteService;
 
 @RestController

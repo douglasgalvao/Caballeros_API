@@ -1,10 +1,12 @@
 package springapi.caballeros.auth.data;
 
 import lombok.Getter;
+import springapi.caballeros.models.Cliente;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import springapi.caballeros.models.cliente.Cliente;
+
 import java.util.Collection;
 import java.util.Optional;
 @Getter
