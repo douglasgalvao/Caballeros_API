@@ -2,6 +2,7 @@ package springapi.caballeros.models;
 
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,5 +21,6 @@ public class Role {
     @Id
     @GeneratedValue
     private UUID id;
+    @Column(unique = true)
     private String name;
 }

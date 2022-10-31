@@ -22,24 +22,37 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    @Transactional
     public List<ClienteDTO> getAllClientes() {
         return clienteRepository.findAll().stream().map(ClienteMapper::toDTO).collect(Collectors.toList());
     }
 
-    @Transactional
     public ClienteDTO getClienteById(UUID id) {
-        return ClienteMapper.toDTO(clienteRepository.getReferenceById(id));
+
+        Boolean user = clienteRepository.findById(id).isPresent();
+        if (!user) {
+            throw new Error("User not found in the database");
+        }
+        return ClienteMapper.toDTO(clienteRepository.findById(id).get());
     }
 
-    @Transactional
     public void saveCliente(ClienteDTO cliente) {
         Cliente client = ClienteMapper.toModel(cliente);
         client.setPassword(encoder.encode(cliente.getPassword()));
         clienteRepository.save(client);
     }
 
-    @Transactional
+    public String saveRole(Role role) {
+
+    }
+
+    public Role findRoleById(UUID id) {
+
+    }
+
+    public Role findRoleByName(String name) {
+
+    }
+
     public String editCliente(UUID id, Cliente cliente) {
         Optional<Cliente> actualCliente = clienteRepository.findById(id);
         if (actualCliente.isEmpty()) {
@@ -62,14 +75,12 @@ public class ClienteService {
         return ("The Client has been edited");
     }
 
-    @Transactional
     public String deleteCliente(UUID id) {
         Cliente client = ClienteMapper.toModel(getClienteById(id));
         clienteRepository.delete(client);
         return "The Client has been deleted.";
     }
 
-    @Transactional
     public String contarAgendamento(UUID id) {
         Cliente cliente = clienteRepository.getReferenceById(id);
         cliente.setNumeroAgendamentos(cliente.getNumeroAgendamentos() + 1);
