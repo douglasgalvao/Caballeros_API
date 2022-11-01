@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @Table(name = "roles")
-@AllArgsConstructor
 @NoArgsConstructor
 public class Role {
     @Id
@@ -31,4 +30,10 @@ public class Role {
     public Role(UUID id) {
         this.id = id;
     }
+
+    public Role(UUID id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
 }

@@ -1,5 +1,6 @@
 package springapi.caballeros.services;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +31,12 @@ public class ClienteService {
     private RoleRepository roleRepository;
 
     public List<ClienteDTO> getAllClientes() {
+        System.out.println(clienteRepository.findAll().stream().map(ClienteMapper::toDTO).collect(Collectors.toList()).toArray());
         return clienteRepository.findAll().stream().map(ClienteMapper::toDTO).collect(Collectors.toList());
+    }
+
+    public PasswordEncoder getBcrypt(){
+        return this.encoder;
     }
 
     public ClienteDTO getClienteById(UUID id) {
@@ -64,7 +70,7 @@ public class ClienteService {
     }
 
     public Role findRoleByName(String name) {
-        Role role = this.role.findByName(name);
+        Role role = this.roleRepository.findByName(name);
         if (role.getName() == null || role.getId() == null ||
                 role.getId().toString().length() <= 0 || role.getName().length() <= 0) {
             throw new Error("Role not found in database with this ID");
@@ -123,11 +129,13 @@ public class ClienteService {
         List<Role> roles = new ArrayList<>();
 
         roles = role.getIdRoles().stream().map(e -> {
-            return new Role(e);
+            return new Role(e, roleRepository.findById(e).get().getName());
         }).collect(Collectors.toList());
 
         user.get().setRoles(roles);
+
         clienteRepository.save(user.get());
+
         return HttpStatus.OK;
     }
 
@@ -136,6 +144,7 @@ public class ClienteService {
             throw new Error("You have to a name valid!");
         }
         role.setId(GenerateUUID.generateUUID());
+        System.out.println(role);
         this.roleRepository.save(role);
         return HttpStatus.OK;
     }
