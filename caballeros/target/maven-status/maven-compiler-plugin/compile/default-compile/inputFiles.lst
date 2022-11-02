@@ -5,9 +5,9 @@
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/models/Role.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/auth/LoginFilter.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/CaballerosApplication.java
+/home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/dtos/ResponseTokenDTO.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/models/Cliente.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/controllers/ClienteController.java
-/home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/auth/ResponseTokenDTO.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/repositories/RoleRepository.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/services/ClienteService.java
 /home/douglas/Área de Trabalho/Projects/SPRINGBOOT/Caballeros/BACKEND/caballeros/src/main/java/springapi/caballeros/controllers/LoginController.java

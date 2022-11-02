@@ -14,6 +14,7 @@ import springapi.caballeros.models.Role;
 import springapi.caballeros.services.ClienteService;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(value = "/cliente")
 public class ClienteController {
 
@@ -22,8 +23,9 @@ public class ClienteController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<ClienteDTO>> getAllClientes() {
-        return ResponseEntity.ok(clienteService.getAllClientes());
+    public ResponseEntity<List<ClienteDTO>> getAllClientes(@RequestAttribute("idCliente") String idCliente,
+            @RequestAttribute("permissions") List<Role> permissions) {
+        return ResponseEntity.ok(clienteService.getAllClientes(idCliente,permissions));
     }
 
     @GetMapping(value = "/{id}")
@@ -78,7 +80,6 @@ public class ClienteController {
     public ResponseEntity<HttpStatus> setRole(@RequestBody Role role) {
         return ResponseEntity.ok(clienteService.settRole(role));
     }
-
 
     @GetMapping(value = "/get/role")
     @ResponseBody

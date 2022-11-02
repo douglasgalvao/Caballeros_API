@@ -1,18 +1,15 @@
 package springapi.caballeros.services;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import springapi.caballeros.config.GenerateUUID;
 import springapi.caballeros.dtos.ClienteDTO;
 import springapi.caballeros.dtos.RolesUserDTO;
@@ -30,12 +27,18 @@ public class ClienteService {
     @Autowired
     private RoleRepository roleRepository;
 
-    public List<ClienteDTO> getAllClientes() {
-        System.out.println(clienteRepository.findAll().stream().map(ClienteMapper::toDTO).collect(Collectors.toList()).toArray());
+    public List<ClienteDTO> getAllClientes(String idCliente, List<Role> permissions) {
+        String id = idCliente.replaceAll("\"", "");
+        if (getClienteById(UUID.fromString(id)) == null) {
+            throw new Error("UNAUTHORIZED");
+        }
+        if(permissions.stream().filter(e -> e.getName() == "ADMIN").findAny().isEmpty()){
+            throw new Error("UNAUTHORIZED TO ACCESS THIS ROUTE");
+        }
         return clienteRepository.findAll().stream().map(ClienteMapper::toDTO).collect(Collectors.toList());
     }
 
-    public PasswordEncoder getBcrypt(){
+    public PasswordEncoder getBcrypt() {
         return this.encoder;
     }
 

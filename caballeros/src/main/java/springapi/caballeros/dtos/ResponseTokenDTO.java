@@ -1,4 +1,4 @@
-package springapi.caballeros.auth;
+package springapi.caballeros.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

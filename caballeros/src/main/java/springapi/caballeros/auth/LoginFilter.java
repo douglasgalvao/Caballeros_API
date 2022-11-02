@@ -1,6 +1,7 @@
 package springapi.caballeros.auth;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -8,42 +9,62 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.WebUtils;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+
+import springapi.caballeros.models.Role;
 
 @Component
 @Order(1)
 public class LoginFilter implements Filter {
-
+    @Value("${jwt.secret}")
+    String jwtSecret;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-
-        if (httpRequest.getServletPath().startsWith("/login") || httpRequest.getServletPath().startsWith("/cliente/save")) {
+        if (httpRequest.getServletPath().startsWith("/login")
+                || httpRequest.getServletPath().startsWith("/cliente/save")) {
             chain.doFilter(request, response);
             return;
         }
 
-        HttpSession session = httpRequest.getSession(false);
-
-        if (session == null || session.getAttribute("token") == null) {
+        Cookie token = WebUtils.getCookie(httpRequest, "token");
+        if (token == null) {
             httpResponse.sendError(HttpStatus.UNAUTHORIZED.value());
             return;
         }
-        System.out.println(session.getAttribute("token"));
-        chain.doFilter(request, response);
+
+        try {
+            String jwt = token.getValue();
+
+            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(jwtSecret)).build().verify(jwt);
+            List<Role> roles = decodedJWT.getClaim("permissions").asList(Role.class);
+            String idCliente = decodedJWT.getClaim("idCliente").toString();
+            httpRequest.setAttribute("permissions",roles.toArray());
+            httpRequest.setAttribute("idCliente", idCliente);
+            chain.doFilter(request, response);
+
+        } catch (JWTVerificationException ex) {
+            httpResponse.sendError(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
 
     }
-
-    
 
     @Override
     public void init(FilterConfig filterConfig) {
