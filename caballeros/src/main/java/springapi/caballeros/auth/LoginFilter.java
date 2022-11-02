@@ -27,19 +27,18 @@ public class LoginFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-                System.out.println(httpRequest.getSession());
-
-        if (httpRequest.getServletPath().startsWith("/login")) {
+        if (httpRequest.getServletPath().startsWith("/login") || httpRequest.getServletPath().startsWith("/cliente/save")) {
             chain.doFilter(request, response);
             return;
         }
 
         HttpSession session = httpRequest.getSession(false);
-        if (session == null || session.getAttribute("Token") == null) {
+
+        if (session == null || session.getAttribute("token") == null) {
             httpResponse.sendError(HttpStatus.UNAUTHORIZED.value());
             return;
         }
-
+        System.out.println(session.getAttribute("token"));
         chain.doFilter(request, response);
 
     }
