@@ -27,14 +27,21 @@ public class ClienteService {
     @Autowired
     private RoleRepository roleRepository;
 
-    public List<ClienteDTO> getAllClientes(String idCliente, List<Role> permissions) {
+    public List<ClienteDTO> getAllClientes(String idCliente, String[] permissions) {
         String id = idCliente.replaceAll("\"", "");
+        Boolean flagPermission = false;
         if (getClienteById(UUID.fromString(id)) == null) {
             throw new Error("UNAUTHORIZED");
         }
-        if(permissions.stream().filter(e -> e.getName() == "ADMIN").findAny().isEmpty()){
-            throw new Error("UNAUTHORIZED TO ACCESS THIS ROUTE");
+        for (String string : permissions) {
+            if(string.equalsIgnoreCase("ADMIN")){
+                flagPermission=true;
+            }
         }
+        if(!flagPermission){
+        throw new Error("UNAUTHORIZED TO ACCESS THIS ROUTE");
+        }
+
         return clienteRepository.findAll().stream().map(ClienteMapper::toDTO).collect(Collectors.toList());
     }
 

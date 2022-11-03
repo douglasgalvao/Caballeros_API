@@ -2,6 +2,7 @@ package springapi.caballeros.auth;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -49,20 +50,21 @@ public class LoginFilter implements Filter {
             return;
         }
 
-        try {
+        // try {
             String jwt = token.getValue();
 
             DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(jwtSecret)).build().verify(jwt);
-            List<Role> roles = decodedJWT.getClaim("permissions").asList(Role.class);
+            String[] roles = decodedJWT.getClaim("permissions").asArray(String.class);
             String idCliente = decodedJWT.getClaim("idCliente").toString();
-            httpRequest.setAttribute("permissions",roles.toArray());
+            httpRequest.setAttribute("permissions", roles);
             httpRequest.setAttribute("idCliente", idCliente);
             chain.doFilter(request, response);
 
-        } catch (JWTVerificationException ex) {
-            httpResponse.sendError(HttpStatus.UNAUTHORIZED.value());
-            return;
-        }
+        // } catch (JWTVerificationException ex) {
+        //     System.out.println(ex);
+        //     httpResponse.sendError(HttpStatus.UNAUTHORIZED.value());
+        //     return;
+        // }
 
     }
 

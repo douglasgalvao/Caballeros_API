@@ -24,7 +24,7 @@ public class ClienteController {
     @GetMapping
     @ResponseBody
     public ResponseEntity<List<ClienteDTO>> getAllClientes(@RequestAttribute("idCliente") String idCliente,
-            @RequestAttribute("permissions") List<Role> permissions) {
+            @RequestAttribute("permissions") String[] permissions) {
         return ResponseEntity.ok(clienteService.getAllClientes(idCliente,permissions));
     }
 
