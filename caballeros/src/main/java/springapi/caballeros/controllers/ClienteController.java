@@ -25,7 +25,7 @@ public class ClienteController {
     @ResponseBody
     public ResponseEntity<List<ClienteDTO>> getAllClientes(@RequestAttribute("idCliente") String idCliente,
             @RequestAttribute("permissions") String[] permissions) {
-        return ResponseEntity.ok(clienteService.getAllClientes(idCliente,permissions));
+        return ResponseEntity.ok(clienteService.getAllClientes(idCliente, permissions));
     }
 
     @GetMapping(value = "/{id}")
@@ -38,13 +38,6 @@ public class ClienteController {
     @ResponseBody
     public ResponseEntity<HttpStatus> saveCliente(@RequestBody ClienteDTO cliente) {
         clienteService.saveCliente(cliente);
-        return ResponseEntity.ok(HttpStatus.CREATED);
-    }
-
-    @PostMapping(value = "/save/admin")
-    @ResponseBody
-    public ResponseEntity<HttpStatus> saveAdmin(@RequestBody ClienteDTO cliente) {
-        clienteService.saveAdmin(cliente);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 

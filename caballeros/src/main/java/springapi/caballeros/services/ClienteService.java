@@ -21,6 +21,7 @@ import springapi.caballeros.repositories.RoleRepository;
 
 @Service
 public class ClienteService {
+    
     @Autowired
     private ClienteRepository clienteRepository;
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -30,11 +31,13 @@ public class ClienteService {
     public List<ClienteDTO> getAllClientes(String idCliente, String[] permissions) {
         String id = idCliente.replaceAll("\"", "");
         Boolean flagPermission = false;
+        
         if (getClienteById(UUID.fromString(id)) == null) {
             throw new Error("UNAUTHORIZED");
         }
+
         for (String string : permissions) {
-            if(string.equalsIgnoreCase("ADMIN")){
+            if(string.equalsIgnoreCase("ADMIN") || string.equalsIgnoreCase("USER")){
                 flagPermission=true;
             }
         }
@@ -59,15 +62,11 @@ public class ClienteService {
     }
 
     public void saveCliente(ClienteDTO cliente) {
+        List<Role> userRoles = new ArrayList<Role>();
+        userRoles.add(findRoleByName("USER"));
+        cliente.setRole(userRoles); 
         Cliente client = ClienteMapper.toModel(cliente);
         client.setPassword(encoder.encode(cliente.getPassword()));
-        clienteRepository.save(client);
-    }
-
-    public void saveAdmin(ClienteDTO cliente) {
-        Cliente client = ClienteMapper.toModel(cliente);
-        client.setPassword(encoder.encode(cliente.getPassword()));
-        // client.getRoles().add(this.role.findByName("ADMIN"));
         clienteRepository.save(client);
     }
 
