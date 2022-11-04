@@ -34,6 +34,12 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.getClienteById(id));
     }
 
+    @GetMapping(value = "/exist")
+    @ResponseBody
+    public ResponseEntity<Boolean> getExist(@PathVariable String email) {
+        return ResponseEntity.ok(clienteService.exist(email));
+    }
+
     @PostMapping(value = "/save")
     @ResponseBody
     public ResponseEntity<HttpStatus> saveCliente(@RequestBody ClienteDTO cliente) {

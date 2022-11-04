@@ -61,6 +61,14 @@ public class ClienteService {
         return ClienteMapper.toDTO(clienteRepository.findById(id).get());
     }
 
+    public Boolean exist(String email){
+        Cliente user = clienteRepository.findByEmail(email);
+        if(user != null){
+            return true;
+        }
+        return false;
+    }
+
     public void saveCliente(ClienteDTO cliente) {
         List<Role> userRoles = new ArrayList<Role>();
         userRoles.add(findRoleByName("USER"));
