@@ -41,10 +41,7 @@ public class LoginService {
                 cliente.getPassword())) {
 
             String jwt = JWT.create()
-                    .withClaim("email", cliente.getEmail())
                     .withClaim("idCliente", cliente.getId().toString())
-                    .withClaim("permissions",
-                            cliente.getRoles().stream().map(e -> e.getName()).collect(Collectors.toList()))
                     .sign(Algorithm.HMAC512(jwtSecret));
             Cookie cookie = new Cookie("token", jwt);
             cookie.setPath("/");

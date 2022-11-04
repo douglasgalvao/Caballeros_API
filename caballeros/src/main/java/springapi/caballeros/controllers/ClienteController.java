@@ -23,9 +23,8 @@ public class ClienteController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<ClienteDTO>> getAllClientes(@RequestAttribute("idCliente") String idCliente,
-            @RequestAttribute("permissions") String[] permissions) {
-        return ResponseEntity.ok(clienteService.getAllClientes(idCliente, permissions));
+    public ResponseEntity<List<ClienteDTO>> getAllClientes(@RequestAttribute("idCliente") String idCliente) {
+        return ResponseEntity.ok(clienteService.getAllClientes(idCliente));
     }
 
     @GetMapping(value = "/{id}")
@@ -41,12 +40,6 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.existCliente(email));
     }
 
-
-    @PostMapping(value = "/exist/{token}")
-    @ResponseBody
-    public ResponseEntity<String> getPermissionsByToken(@RequestBody String token){
-        return ResponseEntity.ok(clienteService.getPermissionsByToken(token));
-    }
 
     @PostMapping(value = "/save")
     @ResponseBody

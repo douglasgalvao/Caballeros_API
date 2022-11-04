@@ -63,13 +63,6 @@ public class ClienteService {
         return ClienteMapper.toDTO(clienteRepository.findById(id).get());
     }
 
-    public String getPermissionsByToken(String token) {
-        String[] chunks = token.split("\\.");
-        Base64.Decoder decoder = Base64.getUrlDecoder();
-        String payload = new String(decoder.decode(chunks[1]));
-        return payload;
-    }
-
     public Boolean existCliente(String email) {
         Cliente user = clienteRepository.findByEmail(email);
         if (user != null) {
