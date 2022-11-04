@@ -34,10 +34,18 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.getClienteById(id));
     }
 
-    @GetMapping(value = "/exist")
+    @GetMapping(value = "/exist/{email}")
     @ResponseBody
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<Boolean> getExist(@PathVariable String email) {
-        return ResponseEntity.ok(clienteService.exist(email));
+        return ResponseEntity.ok(clienteService.existCliente(email));
+    }
+
+
+    @PostMapping(value = "/exist/{token}")
+    @ResponseBody
+    public ResponseEntity<String> getPermissionsByToken(@RequestBody String token){
+        return ResponseEntity.ok(clienteService.getPermissionsByToken(token));
     }
 
     @PostMapping(value = "/save")

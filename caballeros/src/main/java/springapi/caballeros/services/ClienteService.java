@@ -1,16 +1,20 @@
 package springapi.caballeros.services;
 
+import java.io.Console;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import springapi.caballeros.config.GenerateUUID;
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''import springapi.caballeros.config.GenerateUUID;
 import springapi.caballeros.dtos.ClienteDTO;
 import springapi.caballeros.dtos.RolesUserDTO;
 import springapi.caballeros.mappers.ClienteMapper;
@@ -21,28 +25,26 @@ import springapi.caballeros.repositories.RoleRepository;
 
 @Service
 public class ClienteService {
-    
+
     @Autowired
     private ClienteRepository clienteRepository;
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();
     @Autowired
     private RoleRepository roleRepository;
 
-    public List<ClienteDTO> getAllClientes(String idCliente, String[] permissions) {
+    public List<ClienteDTO> getAllClientes(String idCliente) {
         String id = idCliente.replaceAll("\"", "");
         Boolean flagPermission = false;
-        
-        if (getClienteById(UUID.fromString(id)) == null) {
+        ClienteDTO cliente = getClienteById(UUID.fromString(id));
+        if ( cliente == null) {
             throw new Error("UNAUTHORIZED");
         }
-
-        for (String string : permissions) {
-            if(string.equalsIgnoreCase("ADMIN") || string.equalsIgnoreCase("USER")){
-                flagPermission=true;
-            }
+        Optional<Role> op = cliente.getRole().stream().filter(e->e.getName() == "ADMIN").findAny();
+        if(op.get() != null){
+            flagPermission=true;
         }
-        if(!flagPermission){
-        throw new Error("UNAUTHORIZED TO ACCESS THIS ROUTE");
+        if (!flagPermission) {
+            throw new Error("UNAUTHORIZED TO ACCESS THIS ROUTE");
         }
 
         return clienteRepository.findAll().stream().map(ClienteMapper::toDTO).collect(Collectors.toList());
@@ -61,9 +63,16 @@ public class ClienteService {
         return ClienteMapper.toDTO(clienteRepository.findById(id).get());
     }
 
-    public Boolean exist(String email){
+    public String getPermissionsByToken(String token) {
+        String[] chunks = token.split("\\.");
+        Base64.Decoder decoder = Base64.getUrlDecoder();
+        String payload = new String(decoder.decode(chunks[1]));
+        return payload;
+    }
+
+    public Boolean existCliente(String email) {
         Cliente user = clienteRepository.findByEmail(email);
-        if(user != null){
+        if (user != null) {
             return true;
         }
         return false;
@@ -72,7 +81,7 @@ public class ClienteService {
     public void saveCliente(ClienteDTO cliente) {
         List<Role> userRoles = new ArrayList<Role>();
         userRoles.add(findRoleByName("USER"));
-        cliente.setRole(userRoles); 
+        cliente.setRole(userRoles);
         Cliente client = ClienteMapper.toModel(cliente);
         client.setPassword(encoder.encode(cliente.getPassword()));
         clienteRepository.save(client);

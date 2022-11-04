@@ -22,10 +22,7 @@ import org.springframework.web.util.WebUtils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-
-import springapi.caballeros.models.Role;
 
 @Component
 @Order(1)
@@ -39,7 +36,7 @@ public class LoginFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         if (httpRequest.getServletPath().startsWith("/login")
-                || httpRequest.getServletPath().startsWith("/cliente/save")) {
+                || httpRequest.getServletPath().startsWith("/cliente/save") || httpRequest.getServletPath().startsWith("/cliente/exist")) {
             chain.doFilter(request, response);
             return;
         }
