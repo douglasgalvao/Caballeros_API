@@ -14,54 +14,55 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+
+import springapi.caballeros.services.LoginService;
 
 @Component
 @Order(1)
 public class LoginFilter implements Filter {
     @Value("${jwt.secret}")
     String jwtSecret;
-
+    @Autowired
+    LoginService loginService;
+    
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         if (httpRequest.getServletPath().startsWith("/login")
-                || httpRequest.getServletPath().startsWith("/cliente/save") || httpRequest.getServletPath().startsWith("/cliente/exist")) {
+                || httpRequest.getServletPath().startsWith("/cliente/save") || httpRequest.getServletPath().startsWith("/cliente/getPermission")) {
             chain.doFilter(request, response);
             return;
         }
-
-        Cookie token = WebUtils.getCookie(httpRequest, "token");
+       
+        String token = this.loginService.getJwt();
+        // System.out.println(token);
         if (token == null) {
             httpResponse.sendError(HttpStatus.UNAUTHORIZED.value());
             return;
         }
-
-        // try {
-            String jwt = token.getValue();
-
-            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(jwtSecret)).build().verify(jwt);
-            String[] roles = decodedJWT.getClaim("permissions").asArray(String.class);
+        try {
+            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512("token")).build().verify(token);
             String idCliente = decodedJWT.getClaim("idCliente").toString();
-            httpRequest.setAttribute("permissions", roles);
             httpRequest.setAttribute("idCliente", idCliente);
             chain.doFilter(request, response);
-
-        // } catch (JWTVerificationException ex) {
-        //     System.out.println(ex);
-        //     httpResponse.sendError(HttpStatus.UNAUTHORIZED.value());
-        //     return;
-        // }
+        } catch (JWTVerificationException ex) {
+            httpResponse.sendError(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
 
     }
 

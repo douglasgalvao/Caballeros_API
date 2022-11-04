@@ -1,6 +1,7 @@
 package springapi.caballeros.controllers;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +26,9 @@ public class LoginController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<ResponseTokenDTO> login(@RequestBody ClienteLoginDTO clienteLoginDTO,
-            HttpServletResponse httpServletResponse) {
-        return ResponseEntity.ok(loginService.login(clienteLoginDTO, httpServletResponse));
+    public ResponseEntity<ResponseTokenDTO> login(@RequestBody ClienteLoginDTO clienteLoginDTO, ServletRequest request,
+            ServletResponse response) {
+        return ResponseEntity.ok(loginService.login(clienteLoginDTO,request,response));
     }
-
 
 }
