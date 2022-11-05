@@ -22,71 +22,66 @@ public class ClienteController {
     @Autowired
     ClienteService clienteService;
 
-    @GetMapping
+    @PostMapping(value = "/getAllClientes")
     @ResponseBody
-    public ResponseEntity<List<ClienteDTO>> getAllClientes(@RequestAttribute("idCliente") String idCliente) {
-        return ResponseEntity.ok(clienteService.getAllClientes(idCliente));
+    public ResponseEntity<List<ClienteDTO>> getAllClientes(@RequestBody String token) {
+        return ResponseEntity.ok(clienteService.getAllClientes(token));
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/getClienteById/{id}")
     @ResponseBody
     public ResponseEntity<ClienteDTO> getClienteById(@PathVariable UUID id) {
         return ResponseEntity.ok(clienteService.getClienteById(id));
     }
 
-    @PostMapping(value = "/getPermission")
+    @PostMapping(value = "/getPermissionUser")
     @ResponseBody
     public ResponseEntity<List<Role>> getPermissionUser(@RequestBody ResponseTokenDTO token) {
         return ResponseEntity.ok(clienteService.getPermissionClientList(token));
     }
 
-    @GetMapping(value = "/exist/{email}")
+    @GetMapping(value = "/verifyIsClientExist/{email}")
     @ResponseBody
     public ResponseEntity<Boolean> verifyIsClientExist(@PathVariable String email) {
         return ResponseEntity.ok(clienteService.verifyIfClientExist(email));
     }
 
-    @PostMapping(value = "/save")
+    @PostMapping(value = "/saveCliente")
     @ResponseBody
     public ResponseEntity<HttpStatus> saveCliente(@RequestBody ClienteDTO cliente) {
         clienteService.saveCliente(cliente);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/deleteCliente/{id}")
     @ResponseBody
     public ResponseEntity<HttpStatus> deleteCliente(@PathVariable UUID id) {
         clienteService.deleteCliente(id);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/edit/{id}")
+    @PostMapping(value = "/editCliente/{id}")
     @ResponseBody
     public ResponseEntity<HttpStatus> editCliente(@PathVariable UUID id, @RequestBody Cliente cliente) {
         clienteService.editCliente(id, cliente);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-    // quem deve acessar essa rota é o barbeiro quando confima o serviço
-    @PostMapping("countAppointment")
-    @ResponseBody
-    public ResponseEntity<String> contarAgendamento(UUID id) {
-        return ResponseEntity.ok(clienteService.contarAgendamento(id));
-    }
 
-    @PostMapping(value = "/save/clientRole")
+
+    @PostMapping(value = "/saveRole")
     @ResponseBody
     public ResponseEntity<HttpStatus> saveRole(@RequestBody RolesUserDTO role) {
         return ResponseEntity.ok(clienteService.saveRole(role));
     }
 
-    @PostMapping(value = "/set/role")
+    @PostMapping(value = "/setRole")
     @ResponseBody
     public ResponseEntity<HttpStatus> setRole(@RequestBody Role role) {
         return ResponseEntity.ok(clienteService.settRole(role));
     }
 
-    @GetMapping(value = "/get/role")
+    @GetMapping(value = "/getAllRoles")
     @ResponseBody
     public ResponseEntity<List<Role>> getAllRoles() {
         return ResponseEntity.ok(clienteService.findAllRoles());

@@ -39,21 +39,8 @@ public class ClienteService {
   @Value("${jwt.secret}")
   String jwtSecret;
 
-  public List<ClienteDTO> getAllClientes(String idCliente) {
-    String id = idCliente.replaceAll("\"", "");
-    Boolean flagPermission = false;
-    ClienteDTO cliente = getClienteById(UUID.fromString(id));
-    if (cliente == null) {
-      throw new Error("UNAUTHORIZED");
-    }
-    Optional<Role> op = cliente.getRole().stream().filter(e -> e.getName() == "ADMIN").findAny();
-    if (op.get() != null) {
-      flagPermission = true;
-    }
-    if (!flagPermission) {
-      throw new Error("UNAUTHORIZED TO ACCESS THIS ROUTE");
-    }
-
+  public List<ClienteDTO> getAllClientes(String jwt) {
+    
     return clienteRepository.findAll().stream().map(ClienteMapper::toDTO).collect(Collectors.toList());
   }
 

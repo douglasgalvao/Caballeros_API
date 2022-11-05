@@ -1,8 +1,7 @@
 package springapi.caballeros.auth;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -17,14 +16,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.WebUtils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import springapi.caballeros.dtos.ClienteDTO;
+import springapi.caballeros.services.ClienteService;
 import springapi.caballeros.services.LoginService;
 
 @Component
@@ -32,6 +34,9 @@ import springapi.caballeros.services.LoginService;
 public class LoginFilter implements Filter {
     @Value("${jwt.secret}")
     String jwtSecret;
+
+    @Autowired
+    ClienteService clienteService;
     @Autowired
     LoginService loginService;
 
@@ -39,7 +44,6 @@ public class LoginFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
         if (httpRequest.getServletPath().startsWith("/login")
                 || httpRequest.getServletPath().startsWith("/cliente/save")
                 || httpRequest.getServletPath().startsWith("/cliente/getPermission")
@@ -48,21 +52,20 @@ public class LoginFilter implements Filter {
             return;
         }
 
-        String token = this.loginService.getJwt();
-        // System.out.println(token);
-        if (token == null) {
-            httpResponse.sendError(HttpStatus.UNAUTHORIZED.value());
-            return;
+        Cookie cookie = WebUtils.getCookie(httpRequest, "token");
+        if(cookie==null){
+            throw new Error("There's no token setted");
         }
-        try {
-            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512("token")).build().verify(token);
-            String idCliente = decodedJWT.getClaim("idCliente").toString();
-            httpRequest.setAttribute("idCliente", idCliente);
-            chain.doFilter(request, response);
-        } catch (JWTVerificationException ex) {
-            httpResponse.sendError(HttpStatus.UNAUTHORIZED.value());
-            return;
+        String jwtCookie = cookie.getValue();
+        DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(this.jwtSecret)).build().verify(jwtCookie);
+        String idCliente = decodedJWT.getClaim("idCliente").toString();
+        idCliente = idCliente.replaceAll("\"", "");
+        ClienteDTO cliente = clienteService.getClienteById(UUID.fromString(idCliente));
+        if (cliente == null) {
+            throw new Error("The client that you try to get not exist");
         }
+
+        chain.doFilter(request, response);
 
     }
 
