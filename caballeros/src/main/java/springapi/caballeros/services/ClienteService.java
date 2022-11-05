@@ -33,6 +33,9 @@ public class ClienteService {
 
   @Autowired
   private ClienteRepository clienteRepository;
+
+  @Autowired
+  LoginService loginService;
   private final PasswordEncoder encoder = new BCryptPasswordEncoder();
   @Autowired
   private RoleRepository roleRepository;
