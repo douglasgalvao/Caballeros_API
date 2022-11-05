@@ -24,14 +24,8 @@ public class ClienteController {
 
     @PostMapping(value = "/getAllClientes")
     @ResponseBody
-    public ResponseEntity<List<ClienteDTO>> getAllClientes(@RequestBody String token) {
+    public ResponseEntity<List<ClienteDTO>> getAllClientes(@RequestBody ResponseTokenDTO token) {
         return ResponseEntity.ok(clienteService.getAllClientes(token));
-    }
-
-    @GetMapping(value = "/getClienteById/{id}")
-    @ResponseBody
-    public ResponseEntity<ClienteDTO> getClienteById(@PathVariable UUID id) {
-        return ResponseEntity.ok(clienteService.getClienteById(id));
     }
 
     @PostMapping(value = "/getPermissionUser")

@@ -6,14 +6,13 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestAttribute;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -34,16 +33,24 @@ public class ClienteService {
   @Autowired
   private ClienteRepository clienteRepository;
 
-  @Autowired
-  LoginService loginService;
   private final PasswordEncoder encoder = new BCryptPasswordEncoder();
   @Autowired
   private RoleRepository roleRepository;
   @Value("${jwt.secret}")
   String jwtSecret;
 
-  public List<ClienteDTO> getAllClientes(String jwt) {
-    
+  public List<ClienteDTO> getAllClientes(ResponseTokenDTO jwt) {
+    DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(this.jwtSecret)).build().verify(jwt.getToken());
+    String idCliente = decodedJWT.getClaim("idCliente").toString();
+    idCliente = idCliente.replaceAll("\"", "");
+    ClienteDTO cliente = getClienteById(UUID.fromString(idCliente));
+    if (cliente == null) {
+      throw new Error("You have to be logged to access this route");
+    }
+    Optional<Role> roleADM = cliente.getRole().stream().filter(e -> e.getName().equals("ADMIN")).findAny();
+    if (roleADM.isEmpty()) {
+      throw new Error("This role just can be accessed by userADM role");
+    }
     return clienteRepository.findAll().stream().map(ClienteMapper::toDTO).collect(Collectors.toList());
   }
 
@@ -52,7 +59,6 @@ public class ClienteService {
   }
 
   public ClienteDTO getClienteById(UUID id) {
-
     Boolean user = clienteRepository.findById(id).isPresent();
     if (!user) {
       throw new Error("User not found in the database");
@@ -72,13 +78,13 @@ public class ClienteService {
     return cliente.getRole();
   }
 
-  public Boolean verifyIfClientExist(String email){
+  public Boolean verifyIfClientExist(String email) {
     Cliente cliente = clienteRepository.findByEmail(email);
-    if(cliente!=null){
+    if (cliente != null) {
       return true;
     }
     return false;
-  } 
+  }
 
   public void saveCliente(ClienteDTO cliente) {
     List<Role> userRoles = new ArrayList<Role>();
