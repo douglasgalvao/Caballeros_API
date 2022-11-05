@@ -40,6 +40,12 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.getPermissionClientList(token));
     }
 
+    @GetMapping(value = "/exist/{email}")
+    @ResponseBody
+    public ResponseEntity<Boolean> verifyIsClientExist(@PathVariable String email) {
+        return ResponseEntity.ok(clienteService.verifyIfClientExist(email));
+    }
+
     @PostMapping(value = "/save")
     @ResponseBody
     public ResponseEntity<HttpStatus> saveCliente(@RequestBody ClienteDTO cliente) {

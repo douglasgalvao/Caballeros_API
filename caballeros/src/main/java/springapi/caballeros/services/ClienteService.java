@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestAttribute;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -70,16 +71,24 @@ public class ClienteService {
   }
 
   public List<Role> getPermissionClientList(ResponseTokenDTO jwt) {
-    System.out.println(jwt.getToken());
     DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(this.jwtSecret)).build().verify(jwt.getToken());
     String idCliente = decodedJWT.getClaim("idCliente").toString();
     idCliente = idCliente.replaceAll("\"", "");
+    System.out.println(idCliente);
     ClienteDTO cliente = getClienteById(UUID.fromString(idCliente));
     if (cliente == null) {
       throw new Error("The client that you try to get not exist");
     }
     return cliente.getRole();
   }
+
+  public Boolean verifyIfClientExist(String email){
+    Cliente cliente = clienteRepository.findByEmail(email);
+    if(cliente!=null){
+      return true;
+    }
+    return false;
+  } 
 
   public void saveCliente(ClienteDTO cliente) {
     List<Role> userRoles = new ArrayList<Role>();

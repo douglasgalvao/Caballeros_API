@@ -46,6 +46,7 @@ public class LoginService {
             String jwt = JWT.create()
                     .withClaim("idCliente", cliente.getId().toString())
                     .sign(Algorithm.HMAC512(jwtSecret));
+                    
             httpServletResponse.setHeader("token", jwt);
             httpServletRequest.setAttribute("token", jwt);
             httpServletResponse.addCookie(new Cookie("token", jwt));
