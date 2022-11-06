@@ -78,8 +78,12 @@ public class ClienteService {
     return cliente.getRole();
   }
 
-  public Boolean verifyIfClientExist(String email) {
-    Cliente cliente = clienteRepository.findByEmail(email);
+  public Boolean verifyIfClientExist(ResponseTokenDTO jwt) {
+    DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(this.jwtSecret)).build().verify(jwt.getToken());
+    String idCliente = decodedJWT.getClaim("idCliente").toString();
+    idCliente = idCliente.replaceAll("\"", "");
+    System.out.println(idCliente);
+    ClienteDTO cliente = getClienteById(UUID.fromString(idCliente));
     if (cliente != null) {
       return true;
     }
