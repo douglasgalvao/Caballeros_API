@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -79,15 +77,17 @@ public class ClienteService {
   }
 
   public Boolean verifyIfClientExist(ResponseTokenDTO jwt) {
-    DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(this.jwtSecret)).build().verify(jwt.getToken());
-    String idCliente = decodedJWT.getClaim("idCliente").toString();
-    idCliente = idCliente.replaceAll("\"", "");
-    System.out.println(idCliente);
-    ClienteDTO cliente = getClienteById(UUID.fromString(idCliente));
-    if (cliente != null) {
-      return true;
-    }
-    return false;
+    try{
+      DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(this.jwtSecret)).build().verify(jwt.getToken());
+      String idCliente = decodedJWT.getClaim("idCliente").toString();
+      idCliente = idCliente.replaceAll("\"", "");
+      ClienteDTO cliente = getClienteById(UUID.fromString(idCliente));
+      if (cliente != null) {
+        return true;
+      }
+      return false;
+    }catch(Error e){return false;}
+
   }
 
   public void saveCliente(ClienteDTO cliente) {

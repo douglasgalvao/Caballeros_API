@@ -34,9 +34,9 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.getPermissionClientList(token));
     }
 
-    @GetMapping(value = "/verifyIsClientExist")
+    @PostMapping(value = "/verifyIsClientExist")
     @ResponseBody
-    public ResponseEntity<Boolean> verifyIsClientExist(@RequestBody String jwt) {
+    public ResponseEntity<Boolean> verifyIsClientExist(@RequestBody ResponseTokenDTO jwt) {
         return ResponseEntity.ok(clienteService.verifyIfClientExist(jwt));
     }
 
