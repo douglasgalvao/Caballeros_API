@@ -2,7 +2,6 @@ package springapi.caballeros.auth;
 
 import java.io.IOException;
 import java.util.UUID;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -11,20 +10,14 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-
 import springapi.caballeros.dtos.ClienteDTO;
 import springapi.caballeros.services.ClienteService;
 import springapi.caballeros.services.LoginService;
@@ -51,8 +44,9 @@ public class LoginFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-
+        
         Cookie cookie = WebUtils.getCookie(httpRequest, "token");
+        System.out.println(cookie);
         if(cookie==null){
             throw new Error("There's no token setted");
         }
