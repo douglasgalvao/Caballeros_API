@@ -76,9 +76,9 @@ public class ClienteService {
     return cliente.getRole();
   }
 
-  public Boolean verifyIfClientExist(ResponseTokenDTO jwt) {
+  public Boolean verifyIfClientExist(String jwt) {
     try{
-      DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(this.jwtSecret)).build().verify(jwt.getToken());
+      DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(this.jwtSecret)).build().verify(jwt);
       String idCliente = decodedJWT.getClaim("idCliente").toString();
       idCliente = idCliente.replaceAll("\"", "");
       ClienteDTO cliente = getClienteById(UUID.fromString(idCliente));

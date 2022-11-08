@@ -34,10 +34,10 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.getPermissionClientList(token));
     }
 
-    @PostMapping(value = "/verifyIsClientExist")
+    @PostMapping(value = "/verifyifclientexist")
     @ResponseBody
-    public ResponseEntity<Boolean> verifyIsClientExist(@RequestBody ResponseTokenDTO jwt) {
-        return ResponseEntity.ok(clienteService.verifyIfClientExist(jwt));
+    public ResponseEntity<Boolean> verifyIsClientExist(@RequestHeader(value = "Authorization") String Authorization) {
+        return ResponseEntity.ok(clienteService.verifyIfClientExist(Authorization));
     }
 
     @PostMapping(value = "/saveCliente")
@@ -61,7 +61,11 @@ public class ClienteController {
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-
+    // @GetMapping(value = "/getClient")
+    // @ResponseBody
+    // public ResponseEntity<?> teste(@RequestHeader(value = "Authorization") String Authorization) {
+    //     return ResponseEntity.ok(Authorization);
+    // }
 
     @PostMapping(value = "/saveRole")
     @ResponseBody

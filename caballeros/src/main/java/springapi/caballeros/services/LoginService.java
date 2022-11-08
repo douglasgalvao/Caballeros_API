@@ -1,15 +1,12 @@
 package springapi.caballeros.services;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -19,23 +16,20 @@ import springapi.caballeros.dtos.ResponseTokenDTO;
 import springapi.caballeros.models.Cliente;
 import springapi.caballeros.repositories.ClienteRepository;
 
-@Component
+@Service
 public class LoginService {
 
     @Autowired
     ClienteRepository clienteRepository;
     @Autowired
     ClienteService clienteService;
-
     @Value("${jwt.secret}")
     private String jwtSecret;
 
     private String jwt;
 
-    public ResponseTokenDTO login(ClienteLoginDTO clienteLoginDTO, ServletRequest request, ServletResponse response) {
+    public ResponseTokenDTO login(ClienteLoginDTO clienteLoginDTO, ServletResponse httpServletResponse) {
         Cliente cliente = clienteRepository.findByEmail(clienteLoginDTO.getEmail());
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         if (cliente == null) {
             throw new Error("Client not found in database");
         }
@@ -46,11 +40,11 @@ public class LoginService {
             String jwt = JWT.create()
                     .withClaim("idCliente", cliente.getId().toString())
                     .sign(Algorithm.HMAC512(jwtSecret));
-                    
-            httpServletResponse.setHeader("token", jwt);
-            httpServletRequest.setAttribute("token", jwt);
-            httpServletResponse.addCookie(new Cookie("token", jwt));
+
             this.jwt = jwt.toString();
+            Cookie cok = new Cookie("token", jwt);
+            cok.setMaxAge(60 * 30 * 30);
+            ((HttpServletResponse) httpServletResponse).addCookie(cok);
             return new ResponseTokenDTO(jwt);
         }
 

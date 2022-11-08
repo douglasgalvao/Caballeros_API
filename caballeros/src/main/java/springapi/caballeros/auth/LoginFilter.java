@@ -2,22 +2,27 @@ package springapi.caballeros.auth;
 
 import java.io.IOException;
 import java.util.UUID;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.WebUtils;
+import org.springframework.web.client.HttpClientErrorException;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+
 import springapi.caballeros.dtos.ClienteDTO;
 import springapi.caballeros.services.ClienteService;
 import springapi.caballeros.services.LoginService;
@@ -39,28 +44,29 @@ public class LoginFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         if (httpRequest.getServletPath().startsWith("/login")
                 || httpRequest.getServletPath().startsWith("/cliente/save")
-                || httpRequest.getServletPath().startsWith("/cliente/getPermission")
-                || httpRequest.getServletPath().startsWith("/cliente/exist")) {
-            chain.doFilter(request, response);
+                || httpRequest.getServletPath().startsWith("/cliente/getPermission")) {
+            chain.doFilter(httpRequest, response);
             return;
         }
-        
-        Cookie cookie = WebUtils.getCookie(httpRequest, "token");
-        System.out.println(cookie);
-        if(cookie==null){
-            throw new Error("There's no token setted");
+        String jwt = httpRequest.getHeader("Authorization");
+        if (!isTokenValid(jwt)) {
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
-        String jwtCookie = cookie.getValue();
-        DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(this.jwtSecret)).build().verify(jwtCookie);
-        String idCliente = decodedJWT.getClaim("idCliente").toString();
-        idCliente = idCliente.replaceAll("\"", "");
-        ClienteDTO cliente = clienteService.getClienteById(UUID.fromString(idCliente));
-        if (cliente == null) {
-            throw new Error("The client that you try to get not exist");
+        if (jwt == null) {
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
-
-        chain.doFilter(request, response);
-
+        try {
+            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(this.jwtSecret)).build().verify(jwt);
+            String idCliente = decodedJWT.getClaim("idCliente").toString();
+            idCliente = idCliente.replaceAll("\"", "");
+            ClienteDTO cliente = clienteService.getClienteById(UUID.fromString(idCliente));
+            if (cliente == null) {
+                throw new Error("The client that you try to get not exist");
+            }
+            chain.doFilter(request, response);
+        } catch (Error e) {
+            throw e;
+        }
     }
 
     @Override
@@ -68,4 +74,12 @@ public class LoginFilter implements Filter {
 
     }
 
+    public boolean isTokenValid(String token) { // Método que verifica se o Token é válido.
+        try {
+            JWT.require(Algorithm.HMAC512(this.jwtSecret)).build().verify(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
