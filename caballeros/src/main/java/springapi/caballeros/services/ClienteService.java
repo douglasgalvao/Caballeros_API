@@ -46,7 +46,7 @@ public class ClienteService {
       throw new Error("You have to be logged to access this route");
     }
     Optional<Role> roleADM = cliente.getRole().stream().filter(e -> e.getName().equals("ADMIN")).findAny();
-    if (roleADM.isEmpty()) {
+    if (!roleADM.isPresent()) {
       throw new Error("This role just can be accessed by userADM role");
     }
     return clienteRepository.findAll().stream().map(ClienteMapper::toDTO).collect(Collectors.toList());
@@ -101,7 +101,7 @@ public class ClienteService {
 
   public Role findRoleById(UUID id) {
     Optional<Role> role = this.roleRepository.findById(id);
-    if (role.isEmpty()) {
+    if (!role.isPresent()) {
       throw new Error("Role not found in database with this ID");
     }
     return role.get();
@@ -118,7 +118,7 @@ public class ClienteService {
 
   public String editCliente(UUID id, Cliente cliente) {
     Optional<Cliente> actualCliente = clienteRepository.findById(id);
-    if (actualCliente.isEmpty()) {
+    if (!actualCliente.isPresent()) {
       return "Error, cliente não encontrado.";
     }
     if (cliente.getEmail() != null && cliente.getEmail().length() > 0) {
@@ -161,7 +161,7 @@ public class ClienteService {
     }
 
     Optional<Cliente> user = clienteRepository.findById(role.getIdUser());
-    if (user.isEmpty()) {
+    if (!user.isPresent()) {
       throw new Error("User not found in the database");
     }
     List<Role> roles = new ArrayList<>();
