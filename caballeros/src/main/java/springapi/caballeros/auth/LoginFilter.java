@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +42,7 @@ public class LoginFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         if (httpRequest.getServletPath().startsWith("/login")
-                || httpRequest.getServletPath().startsWith("/cliente/save")
+                || httpRequest.getServletPath().startsWith("/cliente/saveClient")
                 || httpRequest.getServletPath().startsWith("/cliente/getPermission")) {
             chain.doFilter(httpRequest, response);
             return;
