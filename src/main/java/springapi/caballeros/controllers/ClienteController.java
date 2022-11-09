@@ -15,7 +15,7 @@ import springapi.caballeros.models.Role;
 import springapi.caballeros.services.ClienteService;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(value = "/cliente")
 public class ClienteController {
 
@@ -34,7 +34,7 @@ public class ClienteController {
     public ResponseEntity<List<Role>> getPermissionUser(@RequestHeader(value = "Authorization") String Authorization) {
         return ResponseEntity.ok(clienteService.getPermissionClientList(Authorization));
     }
-
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping(value = "/verifyifclientexist")
     @ResponseBody
     public ResponseEntity<Boolean> verifyIsClientExist(@RequestHeader(value = "Authorization") String Authorization) {
