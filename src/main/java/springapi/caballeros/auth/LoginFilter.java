@@ -52,6 +52,7 @@ public class LoginFilter implements Filter {
         if (httpRequest.getServletPath().startsWith("/login")
                 || httpRequest.getServletPath().startsWith("/cliente/saveClient")
                 || httpRequest.getServletPath().startsWith("/cliente/getPermission")
+                || httpRequest.getServletPath().startsWith("/cliente/setRole")
                 // || httpRequest.getServletPath().startsWith("/cliente/verifyifclientexist")
                 // || httpRequest.getServletPath().startsWith("/cliente/getClient")
 
