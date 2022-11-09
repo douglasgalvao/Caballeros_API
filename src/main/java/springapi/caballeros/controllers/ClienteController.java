@@ -40,7 +40,7 @@ public class ClienteController {
     public ResponseEntity<Boolean> verifyIsClientExist(@RequestHeader(value = "Authorization") String Authorization) {
         return ResponseEntity.ok(clienteService.verifyIfClientExist(Authorization));
     }
-
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping(value = "/saveCliente")
     @ResponseBody
     public ResponseEntity<HttpStatus> saveCliente(@RequestBody ClienteDTO cliente) {

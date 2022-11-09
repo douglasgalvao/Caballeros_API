@@ -44,7 +44,7 @@ public class LoginFilter implements Filter {
         httpResponse.setHeader("Access-Control-Allow-Headers", "*");
 
         if (httpRequest.getServletPath().startsWith("/login")
-                || httpRequest.getServletPath().startsWith("/cliente/saveClient")
+                || httpRequest.getServletPath().startsWith("/cliente/saveCliente")
                 || httpRequest.getServletPath().startsWith("/cliente/getPermission")
                 || httpRequest.getServletPath().startsWith("/cliente/setRole")
                 // || httpRequest.getServletPath().startsWith("/cliente/verifyifclientexist")
