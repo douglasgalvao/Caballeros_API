@@ -1,5 +1,6 @@
 package springapi.caballeros.auth;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -38,7 +39,6 @@ public class LoginFilter implements Filter {
     @Autowired
     LoginService loginService;
 
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -52,14 +52,14 @@ public class LoginFilter implements Filter {
         if (httpRequest.getServletPath().startsWith("/login")
                 || httpRequest.getServletPath().startsWith("/cliente/saveClient")
                 || httpRequest.getServletPath().startsWith("/cliente/getPermission")
-        // || httpRequest.getServletPath().startsWith("/cliente/verifyifclientexist")
-        // || httpRequest.getServletPath().startsWith("/cliente/getClient")
+                // || httpRequest.getServletPath().startsWith("/cliente/verifyifclientexist")
+                // || httpRequest.getServletPath().startsWith("/cliente/getClient")
 
         ) {
             chain.doFilter(httpRequest, response);
             return;
         }
-        
+
         String jwt = httpRequest.getHeader("Authorization");
         System.out.println("JWT -> " + jwt);
         if (jwt == null) {
