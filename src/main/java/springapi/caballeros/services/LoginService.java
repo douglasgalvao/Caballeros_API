@@ -1,18 +1,11 @@
 package springapi.caballeros.services;
 
-import java.io.IOException;
-
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-
 import springapi.caballeros.dtos.ClienteLoginDTO;
 import springapi.caballeros.dtos.ResponseTokenDTO;
 import springapi.caballeros.models.Cliente;
@@ -32,7 +25,6 @@ public class LoginService {
 
     public ResponseTokenDTO login(ClienteLoginDTO clienteLoginDTO, ServletResponse httpServletResponse) {
         Cliente cliente = clienteRepository.findByEmail(clienteLoginDTO.getEmail());
-        HttpServletResponse httpResponse = (HttpServletResponse) httpServletResponse;
         if (cliente == null) {
             throw new Error("Client not found in database");
         }
