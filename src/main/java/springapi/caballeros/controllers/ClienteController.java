@@ -35,7 +35,6 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.getPermissionClientList(Authorization));
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping(value = "/verifyifclientexist")
     @ResponseBody
     public ResponseEntity<Boolean> verifyIsClientExist(@RequestHeader(value = "Authorization") String Authorization) {
