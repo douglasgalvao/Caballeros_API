@@ -15,7 +15,7 @@ import springapi.caballeros.models.Role;
 import springapi.caballeros.services.ClienteService;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/cliente")
 public class ClienteController {
 
@@ -28,13 +28,15 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.getAllClientes(token));
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping(value = "/getPermissionUser")
     @ResponseBody
-    public ResponseEntity<List<Role>> getPermissionUser(@RequestBody ResponseTokenDTO token) {
-        return ResponseEntity.ok(clienteService.getPermissionClientList(token));
+    public ResponseEntity<List<Role>> getPermissionUser(@RequestHeader(value = "Authorization") String Authorization) {
+        return ResponseEntity.ok(clienteService.getPermissionClientList(Authorization));
     }
 
-    @PostMapping(value = "/verifyifclientexist")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping(value = "/verifyifclientexist")
     @ResponseBody
     public ResponseEntity<Boolean> verifyIsClientExist(@RequestHeader(value = "Authorization") String Authorization) {
         return ResponseEntity.ok(clienteService.verifyIfClientExist(Authorization));
@@ -61,11 +63,11 @@ public class ClienteController {
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-    // @GetMapping(value = "/getClient")
-    // @ResponseBody
-    // public ResponseEntity<?> teste(@RequestHeader(value = "Authorization") String Authorization) {
-    //     return ResponseEntity.ok(Authorization);
-    // }
+    @GetMapping(value = "/getClient")
+    @ResponseBody
+    public ResponseEntity<?> teste(@RequestHeader(value = "Authorization") String Authorization) {
+        return ResponseEntity.ok(Authorization);
+    }
 
     @PostMapping(value = "/saveRole")
     @ResponseBody

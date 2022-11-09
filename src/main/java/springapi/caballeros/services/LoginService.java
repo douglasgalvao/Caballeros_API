@@ -1,5 +1,7 @@
 package springapi.caballeros.services;
 
+import java.io.IOException;
+
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +32,7 @@ public class LoginService {
 
     public ResponseTokenDTO login(ClienteLoginDTO clienteLoginDTO, ServletResponse httpServletResponse) {
         Cliente cliente = clienteRepository.findByEmail(clienteLoginDTO.getEmail());
+        HttpServletResponse httpResponse = (HttpServletResponse) httpServletResponse;
         if (cliente == null) {
             throw new Error("Client not found in database");
         }
@@ -42,9 +45,6 @@ public class LoginService {
                     .sign(Algorithm.HMAC512(jwtSecret));
 
             this.jwt = jwt.toString();
-            Cookie cok = new Cookie("token", jwt);
-            cok.setMaxAge(60 * 30 * 30);
-            ((HttpServletResponse) httpServletResponse).addCookie(cok);
             return new ResponseTokenDTO(jwt);
         }
 

@@ -1,6 +1,5 @@
 package springapi.caballeros.models;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,7 +16,6 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Builder;
 import lombok.Data;

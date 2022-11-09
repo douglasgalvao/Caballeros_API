@@ -64,11 +64,10 @@ public class ClienteService {
     return ClienteMapper.toDTO(clienteRepository.findById(id).get());
   }
 
-  public List<Role> getPermissionClientList(ResponseTokenDTO jwt) {
-    DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(this.jwtSecret)).build().verify(jwt.getToken());
+  public List<Role> getPermissionClientList(String jwt) {
+    DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(this.jwtSecret)).build().verify(jwt);
     String idCliente = decodedJWT.getClaim("idCliente").toString();
     idCliente = idCliente.replaceAll("\"", "");
-    System.out.println(idCliente);
     ClienteDTO cliente = getClienteById(UUID.fromString(idCliente));
     if (cliente == null) {
       throw new Error("The client that you try to get not exist");
