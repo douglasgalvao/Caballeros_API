@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: dbrendaextra
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dbrendaextra
+    ports:
+      - "5432:5432"
+    
+    networks:
+      - dbrendaextra
+  app:
+    build: 
+      context: /home/Projects/SPRINGBOOT/rendaExtra/Caballeros_API
+      dockerfile: /home/Projects/SPRINGBOOT/rendaExtra/Caballeros_API/DockerFile
+
+    volumes:
+      - .:/home
+    networks:
+      - dbrendaextra
+    depends_on:
+        - postgres
+    ports:
+        - 8080:8080
+    command: sleep infinity
+
+networks: 
+ dbrendaextra:
